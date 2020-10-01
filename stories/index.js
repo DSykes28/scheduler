@@ -14,6 +14,9 @@ import Appointment from "components/Appointment/index";
 import Header from "components/Appointment/Header";
 import Empty from "components/Appointment/Empty";
 import Show from "components/Appointment/Show";
+import Confirm from "components/Appointment/Confirm";
+import Status from "components/Appointment/Status";
+import Error from "components/Appointment/Error";
 
 storiesOf("DayListItem", module)
   .addParameters({
@@ -146,4 +149,16 @@ storiesOf("InterviewerList", module)
       interviewer={interviewer}
       onEdit={action("onEdit")}
       onDelete={action("onDelete")}  
+  />)
+  .add("Confirm", () => <
+    Confirm
+    confirmation="Delete the appointment?"
+    onConfirm={action("onConfirm")}
+    onCancel={action("onCancel")}
+  />)
+  .add("Status", () => <Status deleting="Deleting" />)
+  .add("Error", () => <
+    Error
+    error="Could not delete appointment."
+    onClose={action("onClose")}
   />)
