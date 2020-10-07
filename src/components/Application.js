@@ -6,6 +6,7 @@ import "components/Appointment/styles.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import { getAppointmentsForDay } from "helpers/selectors";
+import { useVisualMode } from "../hooks/useVisualMode";
 
 //const appointments = [
 //  {
