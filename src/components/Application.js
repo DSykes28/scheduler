@@ -5,8 +5,7 @@ import "components/Application.scss";
 import "components/Appointment/styles.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay } from "helpers/selectors";
-import { useVisualMode } from "../hooks/useVisualMode";
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 
 //const appointments = [
 //  {
@@ -56,6 +55,7 @@ import { useVisualMode } from "../hooks/useVisualMode";
 //  }
 //];
 
+ 
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
@@ -117,11 +117,7 @@ export default function Application(props) {
       />
       </section>
       <section className="schedule">
-        {dailyAppointments.map((appointment, id) => {
-          return (
-          <Appointment key={id} {...appointment} />);
-          })
-        }
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
