@@ -19,7 +19,7 @@ export default function Form (props) {
   }
 
   const save = () => {
-   props.onSave(name, interviewer);
+    props.onSave(name, interviewer);
   }
 
   
@@ -39,7 +39,10 @@ export default function Form (props) {
              */
           />
         </form>
-        <InterviewerList interviewers={[]} interviewer={interviewer} onChange={setInterviewer} />
+        <InterviewerList interviewers={props.interviewers} 
+          interviewer={interviewer} 
+          onChange={setInterviewer} 
+        />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">

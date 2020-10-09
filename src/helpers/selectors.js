@@ -8,22 +8,15 @@ function getAppointmentsForDay(state, day) {
 exports.getAppointmentsForDay = getAppointmentsForDay;
   
 
-function getInterview(state, interview) {
-  if (interview === null) { 
-    return null;
-  } else {
-    for (const interviewer in state.interviewers) {
-      if (interview.interviewer === state.interviewers[interviewer].id) {
-        return ({"student": interview.student,
-                 "interviewer": {
-                 "id": interview.interviewer,
-                 "name": state.interviewers[interviewer].name,
-                 "avatar": state.interviewers[interviewer].avatar
-                 }
-                })
-      }
-    }
+function getInterviewersForDay(state, dayName) {
+
+if (dayName === null) {
+  return null;
+} else {  
+    const day = state.days.filter( (day) => day.name === dayName)[0]
+    const interviewersIds = day.interviewers
+    return interviewersIds.map(id => state.interviewers[id])
   }
 };
 
-exports.getInterview = getInterview;
+exports.getInterviewersForDay = getInterviewersForDay;
