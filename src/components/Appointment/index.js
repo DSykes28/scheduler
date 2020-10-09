@@ -6,15 +6,18 @@ import Form from 'components/Appointment/Form';
 import Status from 'components/Appointment/Status';
 import useVisualMode from '../../hooks/useVisualMode';
 import Confirm from 'components/Appointment/Confirm';
+import Error from 'components/Appointment/Error';
 
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
-const DELETING = "DELETING"
-const CONFIRM = "CONFIRM"
-const EDIT = "EDIT"
+const DELETING = "DELETING";
+const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE"
 
 export default function Appointment (props) {
   const { mode, transition, back } = useVisualMode(
@@ -30,13 +33,15 @@ export default function Appointment (props) {
     props
       .bookInterview(props.id, interview)
       .then(() => transition(SHOW))
-  };
+      .catch(error => transition(ERROR_SAVE, true));
+    };
 
   function deleteInterview() {
-    transition(DELETING)
+    transition(DELETING, true)
     props
       .cancelInterview(props.id)
       .then(() => transition(EMPTY))
+      .catch(error => transition(ERROR_DELETE, true));
   };
 
   return <article className="appointment">
@@ -52,7 +57,7 @@ export default function Appointment (props) {
   {mode === SHOW && (
     <Show
       studentName={props.interview ? props.interview.student : ""}
-      interviewer={props.interviewer}
+      interviewer={props.interview.interviewer}
       onEdit={() => transition(EDIT)}
       onDelete={() => transition(CONFIRM)}
     />
@@ -68,6 +73,9 @@ export default function Appointment (props) {
   {mode === SAVING && (<Status message='...Saving' /> )}
   {mode === DELETING && (<Status message='...Deleting' />)}
   {mode === CONFIRM && (<Confirm onConfirm={deleteInterview} onCancel={() => back()} />)}
+  {mode === ERROR_SAVE && (<Error onClose={() => back()} message='...Something went wrong' />)}
+  {mode === ERROR_DELETE && (<Error onClose={() => back()} message='Could not delete appointment' />)}
   </article>
 }
+
 
