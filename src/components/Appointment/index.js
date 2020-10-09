@@ -25,16 +25,18 @@ export default function Appointment (props) {
   );
 
   function save(name, interviewer) {
-    const interview = {
-      student: name,
-      interviewer
-    };
-    transition(SAVING)
-    props
+    if (name && interviewer) {
+      const interview = {
+        student: name,
+        interviewer
+      };
+      transition(SAVING)
+      props
       .bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch(error => transition(ERROR_SAVE, true));
-    };
+    }
+  };
 
   function deleteInterview() {
     transition(DELETING, true)
@@ -57,7 +59,7 @@ export default function Appointment (props) {
   {mode === SHOW && (
     <Show
       studentName={props.interview ? props.interview.student : ""}
-      interviewer={props.interview.interviewer}
+      interviewer={props.interview ? props.interview.interviewer : ""}
       onEdit={() => transition(EDIT)}
       onDelete={() => transition(CONFIRM)}
     />

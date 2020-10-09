@@ -14,6 +14,13 @@ export default function useApplicationData() {
   
   //The appointment id is known when an interview is confirmed or canceled by the server.
 
+  function spotsRemaining(num) {
+    const currentSpots = state.days.find((spots) => spots.name === state.day);
+    console.log(state.days)
+    currentSpots.spots += num;
+    return state.days;
+  }
+
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -24,6 +31,9 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
+    spotsRemaining(-1)
+
     return axios
       .put(`http://localhost:8001/api/appointments/${id}`, appointment)    
       .then(() => {
@@ -34,12 +44,15 @@ export default function useApplicationData() {
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
-      interview: null
+      interview: null,
     }
     const appointments = {
       ...state.appointments,
       [id]: appointment
     }
+
+    spotsRemaining(1)
+
     return axios
     .delete(`http://localhost:8001/api/appointments/${id}`)
     .then(() => {
