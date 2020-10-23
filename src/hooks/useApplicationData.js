@@ -12,14 +12,7 @@ export default function useApplicationData() {
   
   const setDay = day => setState({ ...state, day });
   
-  //The appointment id is known when an interview is confirmed or canceled by the server.
-
-  function spotsRemaining(num) {
-    const currentSpots = state.days.find((spots) => spots.name === state.day);
-    console.log(state.days)
-    currentSpots.spots += num;
-    return state.days;
-  }
+  //The appointment id is known when an interview is confirmed or cancelled by the server.
 
   function bookInterview(id, interview) {
     const appointment = {
@@ -32,12 +25,16 @@ export default function useApplicationData() {
       [id]: appointment
     };
 
-    spotsRemaining(-1)
-
     return axios
-      .put(`http://localhost:8001/api/appointments/${id}`, appointment)    
+      .put(`http://localhost:8001/api/appointments/${id}`, {interview: interview})    
       .then(() => {
-        setState({...state, appointments});
+        setState(prev => ({...prev, appointments}));
+      })
+      .then(()=>{
+        axios.get(`http://localhost:8001/api/days`)
+        .then((res)=>{
+          setState(prev => ({...prev, days: res.data}));
+        })
       })
   };
   
@@ -51,12 +48,16 @@ export default function useApplicationData() {
       [id]: appointment
     }
 
-    spotsRemaining(1)
-
     return axios
     .delete(`http://localhost:8001/api/appointments/${id}`)
     .then(() => {
       setState({...state, appointments})
+    })
+    .then(()=>{
+      axios.get(`http://localhost:8001/api/days`)
+      .then((res)=>{
+        setState(prev => ({...prev, days: res.data}));
+      })
     })
   };
 
